@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import parse from '../src/parsing.js';
 import { Command } from "commander";
+import genDiff from '../src/index.js';
 
 const program = new Command()
 
@@ -26,7 +27,8 @@ program
         const data1 = parse(content1, format1)
         const data2 = parse(content2, format2)
 
-        console.log(data1, data2)
+        const result = genDiff(data1, data2)
+        console.log(result)
     })
     
 program.parse(process.argv)
