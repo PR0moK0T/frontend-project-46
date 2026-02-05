@@ -1,2 +1,3 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/PR0moK0T/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/PR0moK0T/frontend-project-46/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=PR0moK0T_frontend-project-46&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=PR0moK0T_frontend-project-46)
