@@ -23,3 +23,17 @@ test('genDiff flat JSON', () => {
 
   expect(normalize(result)).toBe(normalize(expected));
 });
+test('genDiff flat YAML', () => {
+  const content1 = fs.readFileSync(getFixturePath('filepath1.yml'), 'utf-8');
+  const content2 = fs.readFileSync(getFixturePath('filepath2.yml'), 'utf-8');
+  
+  const data1 = parse(content1, 'yml');
+  const data2 = parse(content2, 'yml');
+
+  const result = genDiff(data1, data2);
+  const expected = fs.readFileSync(getFixturePath('expected.txt'), 'utf-8');
+
+  const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
+
+  expect(normalize(result)).toBe(normalize(expected));
+});
