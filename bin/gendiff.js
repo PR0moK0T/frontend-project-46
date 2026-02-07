@@ -1,9 +1,7 @@
 #!/usr/bin/env node
-import fs from 'fs';
 import path from 'path';
-import parse from '../src/parsing.js';
 import { Command } from "commander";
-import genDiff from '../src/index.js';
+import genDiff from '../src/genDiff.js';
 
 const program = new Command()
 
@@ -13,22 +11,12 @@ program
     .version('0.0.1', '-V, --version', 'output the version number')
     .option('-f, --format [type]', 'output format')
     .helpOption('-h, --help', 'display help for command')
+    .action((filepath1, filepath2, options) => {
+    const fullPath1 = path.resolve(process.cwd(), filepath1);
+    const fullPath2 = path.resolve(process.cwd(), filepath2);
 
-    program.action((filepath1, filepath2) => {
-        const fullPath1 = path.resolve(process.cwd(), filepath1)
-        const fullPath2 = path.resolve(process.cwd(), filepath2)
-
-        const content1 = fs.readFileSync(fullPath1, 'utf-8')
-        const content2 = fs.readFileSync(fullPath2, 'utf-8')
-
-        const format1 = path.extname(filepath1).slice(1)
-        const format2 = path.extname(filepath2).slice(1)
-
-        const data1 = parse(content1, format1)
-        const data2 = parse(content2, format2)
-
-        const result = genDiff(data1, data2)
-        console.log(result)
-    })
+    const result = genDiff(fullPath1, fullPath2, options.format);
+    console.log(result);
+  });
     
 program.parse(process.argv)

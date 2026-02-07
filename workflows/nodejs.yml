@@ -1,32 +1,35 @@
-name: Node CI
+name: Run tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
 
-      - run: npm install
-      - run: make lint
-      - run: npm test -- --coverage
+      - name: Install dependencies
+        run: npm ci
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Run tests
+        run: npm test

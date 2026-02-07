@@ -1,36 +1,31 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
-import genDiff from '../src/index.js';
-import parse from '../src/parsing.js';
+import genDiff from '../src/genDiff.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename) =>
+  path.join(__dirname, '..', '__fixtures__', filename);
 
-test('genDiff flat JSON', () => {
-  const content1 = fs.readFileSync(getFixturePath('file1.json'), 'utf-8');
-  const content2 = fs.readFileSync(getFixturePath('file2.json'), 'utf-8');
-  
-  const data1 = parse(content1, 'json');
-  const data2 = parse(content2, 'json');
+test('genDiff JSON', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.json');
 
-  const result = genDiff(data1, data2);
+  const result = genDiff(filepath1, filepath2);
   const expected = fs.readFileSync(getFixturePath('expected.txt'), 'utf-8');
 
   const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
 
   expect(normalize(result)).toBe(normalize(expected));
 });
-test('genDiff flat YAML', () => {
-  const content1 = fs.readFileSync(getFixturePath('filepath1.yml'), 'utf-8');
-  const content2 = fs.readFileSync(getFixturePath('filepath2.yml'), 'utf-8');
-  
-  const data1 = parse(content1, 'yml');
-  const data2 = parse(content2, 'yml');
 
-  const result = genDiff(data1, data2);
+test('genDiff YAML', () => {
+  const filepath1 = getFixturePath('filepath1.yml');
+  const filepath2 = getFixturePath('filepath2.yml');
+
+  const result = genDiff(filepath1, filepath2);
   const expected = fs.readFileSync(getFixturePath('expected.txt'), 'utf-8');
 
   const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
