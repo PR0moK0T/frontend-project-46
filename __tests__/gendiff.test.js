@@ -9,26 +9,45 @@ const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) =>
   path.join(__dirname, '..', '__fixtures__', filename);
 
-test('genDiff JSON', () => {
-  const filepath1 = getFixturePath('file1.json');
-  const filepath2 = getFixturePath('file2.json');
+const readFixture = (filename) =>
+  fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-  const result = genDiff(filepath1, filepath2);
-  const expected = fs.readFileSync(getFixturePath('expected.txt'), 'utf-8');
+const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
 
-  const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
+const json1 = getFixturePath('file1.json');
+const json2 = getFixturePath('file2.json');
 
-  expect(normalize(result)).toBe(normalize(expected));
+const yaml1 = getFixturePath('filepath1.yml');
+const yaml2 = getFixturePath('filepath2.yml');
+
+describe('gendiff stylish format', () => {
+  test('JSON stylish', () => {
+    const result = genDiff(json1, json2, 'stylish');
+    const expected = readFixture('expected.txt');
+
+    expect(normalize(result)).toBe(normalize(expected));
+  });
+
+  test('YAML stylish', () => {
+    const result = genDiff(yaml1, yaml2, 'stylish');
+    const expected = readFixture('expected.txt');
+
+    expect(normalize(result)).toBe(normalize(expected));
+  });
 });
 
-test('genDiff YAML', () => {
-  const filepath1 = getFixturePath('filepath1.yml');
-  const filepath2 = getFixturePath('filepath2.yml');
+describe('gendiff plain format', () => {
+  test('JSON plain', () => {
+    const result = genDiff(json1, json2, 'plain');
+    const expected = readFixture('expected_plain.txt');
 
-  const result = genDiff(filepath1, filepath2);
-  const expected = fs.readFileSync(getFixturePath('expected.txt'), 'utf-8');
+    expect(normalize(result)).toBe(normalize(expected));
+  });
 
-  const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
+  test('YAML plain', () => {
+    const result = genDiff(yaml1, yaml2, 'plain');
+    const expected = readFixture('expected_plain.txt');
 
-  expect(normalize(result)).toBe(normalize(expected));
+    expect(normalize(result)).toBe(normalize(expected));
+  });
 });

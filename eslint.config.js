@@ -3,6 +3,7 @@ import globals from "globals";
 
 export default [
   js.configs.recommended,
+
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
@@ -11,7 +12,15 @@ export default [
         ...globals.node,
       },
     },
-    rules: {
-    }
+    rules: {},
+  },
+
+  {
+    files: ["**/__tests__/**/*.js", "**/*.test.js"],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
   },
 ];
