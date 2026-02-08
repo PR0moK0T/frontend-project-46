@@ -1,13 +1,18 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
+import jsonFormatter from './json.js';
 
-export default (tree, format) => {
-  switch (format) {
+const format = (tree, formatName = 'stylish') => {
+  switch (formatName) {
     case 'stylish':
       return stylish(tree);
     case 'plain':
       return plain(tree);
+    case 'json':
+      return jsonFormatter(tree);
     default:
-      throw new Error(`Unknown format: ${format}`);
+      throw new Error(`Unknown format: ${formatName}`);
   }
 };
+
+export default format;

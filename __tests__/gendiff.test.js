@@ -51,3 +51,15 @@ describe('gendiff plain format', () => {
     expect(normalize(result)).toBe(normalize(expected));
   });
 });
+
+test('genDiff JSON format', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.json');
+
+  const result = genDiff(filepath1, filepath2, 'json');
+  const expected = fs.readFileSync(getFixturePath('expected_json.txt'), 'utf-8');
+
+  const normalize = (str) => str.trim().replace(/\r\n/g, '\n');
+
+  expect(normalize(result)).toBe(normalize(expected));
+});
